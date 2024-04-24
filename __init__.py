@@ -109,6 +109,11 @@ def load_nodes():
 
     for filename in (here / "nodes").iterdir():
         
+        if str(filename).endswith("mask.py"):
+            print("T100: Skipping", filename)
+            continue
+
+
         t9a = timer()
         
         print(filename)
