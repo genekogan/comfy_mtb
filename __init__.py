@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding:utf-8 -*-
 ###
 # File: __init__.py
 # Project: comfy_mtb
@@ -6,6 +7,23 @@
 # Copyright (c) 2023 Mel Massadian
 #
 ###
+from timeit import default_timer as timer
+
+
+t1 = timer()
+
+import logging
+logging.basicConfig(level=logging.INFO)
+
+print("T1", t1)
+logging.info("T1", t1)
+
+t2 = timer()
+print("T2", t2, t2 - t1)
+logging.info("T2", t2, t2 - t1)
+
+
+
 import os
 
 # todo: don't override this if the user has that setup already
@@ -22,14 +40,30 @@ import shutil
 import traceback
 from importlib import reload
 
+t3 = timer()
+print("T3", t3, t3 - t2)
+logging.info("T3", t3, t3 - t2)
+
 from aiohttp import web
 from server import PromptServer
 
+t4 = timer()
+print("T4", t4, t4 - t3)
+logging.info("T4", t4, t4 - t3)
+
 import nodes
+
+t5 = timer()
+print("T5", t5, t5 - t4)
+logging.info("T5", t5, t5 - t4)
 
 from .endpoint import endlog
 from .log import blue_text, cyan_text, get_label, get_summary, log
 from .utils import comfy_dir, here
+
+t6 = timer()
+print("T6", t6, t6 - t5)
+logging.info("T6", t6, t6 - t5)
 
 NODE_CLASS_MAPPINGS = {}
 NODE_DISPLAY_NAME_MAPPINGS = {}
@@ -42,7 +76,7 @@ __version__ = "0.2.0"
 def extract_nodes_from_source(filename):
     source_code = ""
 
-    with open(filename, encoding="utf8") as file:
+    with open(filename, "r", encoding="utf8") as file:
         source_code = file.read()
 
     nodes = []
@@ -80,7 +114,7 @@ def load_nodes():
                 module = importlib.import_module(
                     f".nodes.{module_name}", package=__package__
                 )
-                _nodes = module.__nodes__
+                _nodes = getattr(module, "__nodes__")
                 nodes.extend(_nodes)
                 log.debug(f"Imported {module_name} nodes")
 
@@ -96,7 +130,7 @@ def load_nodes():
 
     if errors:
         log.debug(
-            "Some nodes failed to load:\n\t"
+            f"Some nodes failed to load:\n\t"
             + "\n\t".join(errors)
             + "\n\n"
             + "Check that you properly installed the dependencies.\n"
@@ -105,6 +139,9 @@ def load_nodes():
 
     return (nodes, nodes_failed)
 
+t7 = timer()
+print("T7", t7, t7 - t6)
+logging.info("T7", t7, t7 - t6)
 
 # - REGISTER WEB EXTENSIONS
 web_extensions_root = comfy_dir / "web" / "extensions"
@@ -122,10 +159,22 @@ if web_mtb.exists() and hasattr(nodes, "EXTENSION_WEB_DIRS"):
         )
 
 
+t8 = timer()
+print("T8", t8, t8 - t7)
+logging.info("T8", t8, t8 - t7)
+
 # - REGISTER NODES
 nodes, failed = load_nodes()
+
+t9 = timer()
+print("T9", t9, t9 - t8)
+logging.info("T9", t9, t9 - t8)
+
 for node_class in nodes:
     class_name = node_class.__name__
+    tt = timer()
+    print("class_name", class_name, tt)
+    logging.info("class_name", class_name, tt)
     node_label = f"{get_label(class_name)} (mtb)"
     NODE_CLASS_MAPPINGS[node_label] = node_class
     NODE_DISPLAY_NAME_MAPPINGS[class_name] = node_label
@@ -146,7 +195,7 @@ for node_class in nodes:
             )
 
 log.debug(
-    "Loaded the following nodes:\n\t"
+    f"Loaded the following nodes:\n\t"
     + "\n\t".join(
         f"{cyan_text(k)}: {blue_text(get_summary(doc)) if doc else '-'}"
         for k, doc in NODE_CLASS_MAPPINGS_DEBUG.items()
@@ -161,6 +210,10 @@ if failed:
             f"Some nodes ({len(failed)}) could not be loaded. This can be ignored, but go to http://{base_url}:{port}/mtb if you want more information."
         )
 
+
+t10 = timer()
+print("T10", t10, t10 - t9)
+logging.info("T10", t10, t10 - t9)
 
 # - ENDPOINT
 
@@ -179,12 +232,6 @@ if hasattr(PromptServer, "instance"):
 
     PromptServer.instance.app.router.add_static(
         "/mtb-assets/", path=(here / "html").as_posix()
-    )
-
-    # NOTE: we add an extra static path to avoid comfy mechanism
-    # that loads every script in web.
-    PromptServer.instance.app.add_routes(
-        [web.static("/mtb_async", (here / "web_async").as_posix())]
     )
 
     @PromptServer.instance.routes.get("/mtb/manage")
@@ -328,6 +375,11 @@ if hasattr(PromptServer, "instance"):
         return await endpoint.do_action(request)
 
 
+
+t11 = timer()
+print("T11", t11, t11 - t10)
+logging.info("T11", t11, t11 - t10)
+
 # - WAS Dictionary
 MANIFEST = {
     "name": "MTB Nodes",  # The title that will be displayed on Node Class menu,. and Node Class view
@@ -336,3 +388,8 @@ MANIFEST = {
     "project": "https://github.com/melMass/comfy_mtb",  # The address that the `name` value will link to on Node Class Views
     "description": "Set of nodes that enhance your animation workflow and provide a range of useful tools including features such as manipulating bounding boxes, perform color corrections, swap faces in images, interpolate frames for smooth animation, export to ProRes format, apply various image operations, work with latent spaces, generate QR codes, and create normal and height maps for textures.",
 }
+
+
+t12 = timer()
+print("T12", t12, t12 - t11)
+logging.info("T12", t12, t12 - t11)
