@@ -108,6 +108,10 @@ def load_nodes():
     nodes_failed = []
 
     for filename in (here / "nodes").iterdir():
+        
+        t9a = timer()
+        
+        print(filename)
         if filename.suffix == ".py":
             module_name = filename.stem
 
@@ -128,6 +132,11 @@ def load_nodes():
                 )
                 # Read __nodes__ variable from the source file
                 nodes_failed.extend(extract_nodes_from_source(filename))
+
+        t9b = timer()
+        print("T9!", filename, t9b - t9a)
+        logging.info(f"T9! {filename} {t9b - t9a}")
+        
 
     if errors:
         log.debug(
@@ -175,7 +184,7 @@ for node_class in nodes:
     class_name = node_class.__name__
     tt = timer()
     print("class_name", class_name, tt)
-    logging.info("class_name", class_name, tt)
+    
     node_label = f"{get_label(class_name)} (mtb)"
     NODE_CLASS_MAPPINGS[node_label] = node_class
     NODE_DISPLAY_NAME_MAPPINGS[class_name] = node_label
