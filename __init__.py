@@ -9,6 +9,7 @@
 ###
 from timeit import default_timer as timer
 
+print("LOADING MTB")
 
 t1 = timer()
 
@@ -16,11 +17,11 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 print("T1", t1)
-logging.info("T1", t1)
+logging.info(f"T1 {t1}")
 
 t2 = timer()
 print("T2", t2, t2 - t1)
-logging.info("T2", t2, t2 - t1)
+logging.info(f"T2 {t2} {t2 - t1}")
 
 
 
@@ -42,20 +43,20 @@ from importlib import reload
 
 t3 = timer()
 print("T3", t3, t3 - t2)
-logging.info("T3", t3, t3 - t2)
+logging.info(f"T3 {t3} {t3 - t2}")
 
 from aiohttp import web
 from server import PromptServer
 
 t4 = timer()
 print("T4", t4, t4 - t3)
-logging.info("T4", t4, t4 - t3)
+logging.info(f"T4 {t4} {t4 - t3}")
 
 import nodes
 
 t5 = timer()
 print("T5", t5, t5 - t4)
-logging.info("T5", t5, t5 - t4)
+logging.info(f"T5 {t5} {t5 - t4}")
 
 from .endpoint import endlog
 from .log import blue_text, cyan_text, get_label, get_summary, log
@@ -63,7 +64,7 @@ from .utils import comfy_dir, here
 
 t6 = timer()
 print("T6", t6, t6 - t5)
-logging.info("T6", t6, t6 - t5)
+logging.info(f"T6 {t6} {t6 - t5}")
 
 NODE_CLASS_MAPPINGS = {}
 NODE_DISPLAY_NAME_MAPPINGS = {}
@@ -141,7 +142,7 @@ def load_nodes():
 
 t7 = timer()
 print("T7", t7, t7 - t6)
-logging.info("T7", t7, t7 - t6)
+logging.info(f"T7 {t7} {t7 - t6}")
 
 # - REGISTER WEB EXTENSIONS
 web_extensions_root = comfy_dir / "web" / "extensions"
@@ -161,14 +162,14 @@ if web_mtb.exists() and hasattr(nodes, "EXTENSION_WEB_DIRS"):
 
 t8 = timer()
 print("T8", t8, t8 - t7)
-logging.info("T8", t8, t8 - t7)
+logging.info(f"T8 {t8} {t8 - t7}")
 
 # - REGISTER NODES
 nodes, failed = load_nodes()
 
 t9 = timer()
 print("T9", t9, t9 - t8)
-logging.info("T9", t9, t9 - t8)
+logging.info(f"T9 {t9} {t9 - t8}")
 
 for node_class in nodes:
     class_name = node_class.__name__
@@ -213,7 +214,7 @@ if failed:
 
 t10 = timer()
 print("T10", t10, t10 - t9)
-logging.info("T10", t10, t10 - t9)
+logging.info(f"T10 {t10} {t10 - t9}")
 
 # - ENDPOINT
 
@@ -378,7 +379,7 @@ if hasattr(PromptServer, "instance"):
 
 t11 = timer()
 print("T11", t11, t11 - t10)
-logging.info("T11", t11, t11 - t10)
+logging.info(f"T11 {t11} {t11 - t10}")
 
 # - WAS Dictionary
 MANIFEST = {
@@ -392,4 +393,4 @@ MANIFEST = {
 
 t12 = timer()
 print("T12", t12, t12 - t11)
-logging.info("T12", t12, t12 - t11)
+logging.info(f"T12 {t12} {t12 - t11}")
