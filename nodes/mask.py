@@ -1,38 +1,11 @@
-print("\n\n\n\n\n\n\n\n\n\n")
-
-from timeit import default_timer as timer
-
-print("LOADING MTB")
-
-t1 = timer()
-
-import logging
-logging.basicConfig(level=logging.INFO)
-
-print("M1", t1)
-logging.info(f"M1: {t1}")
-
-
 import comfy.utils
-
-t2 = timer()
-print("M2", t2)
-logging.info(f"M2: {t2}, {t2 - t1}")
-
 from PIL import Image
 from rembg import remove
 
-t3 = timer()
-print("M3", t3)
-logging.info(f"M3: {t3}, {t3 - t2}")
-
 from ..utils import pil2tensor, tensor2pil
 
-t4 = timer()
-print("M4", t4)
-logging.info(f"M4: {t4}, {t4 - t3}")
 
-class ImageRemoveBackgroundRembg:
+class MTB_ImageRemoveBackgroundRembg:
     """Removes the background from the input using Rembg."""
 
     @classmethod
@@ -127,21 +100,13 @@ class ImageRemoveBackgroundRembg:
 
             pbar.update(1)
 
-        return (pil2tensor(out_img), pil2tensor(out_mask), pil2tensor(out_img_on_bg))
-
-
-t5 = timer()
-print("M5", t5)
-logging.info(f"M5: {t5}, {t5 - t4}")
+        return (
+            pil2tensor(out_img),
+            pil2tensor(out_mask),
+            pil2tensor(out_img_on_bg),
+        )
 
 
 __nodes__ = [
-    ImageRemoveBackgroundRembg,
+    MTB_ImageRemoveBackgroundRembg,
 ]
-
-
-t6 = timer()
-print("M6", t6)
-logging.info(f"M6: {t6}, {t6 - t5}")
-
-print("\n\n\n\n\n\n\n\n\n\n")
