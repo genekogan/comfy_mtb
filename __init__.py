@@ -134,8 +134,8 @@ def load_nodes():
                 nodes_failed.extend(extract_nodes_from_source(filename))
 
         t9b = timer()
-        print("T9!", filename, t9b - t9a)
-        logging.info(f"T9! {filename} {t9b - t9a}")
+        print("T9!!!", filename, t9b - t9a)
+        logging.info(f"T9!!! {filename} {t9b - t9a}")
         
     t9c = timer()
     
@@ -149,7 +149,7 @@ def load_nodes():
         )
 
     t9d = timer()
-    print("T9d", t9d  - t9c)
+    print("T9d &", t9d  - t9c)
     logging.info(f"T9c {t9d - t9c}")
     
     return (nodes, nodes_failed)
@@ -175,24 +175,24 @@ if web_mtb.exists() and hasattr(nodes, "EXTENSION_WEB_DIRS"):
 
 
 t8 = timer()
-print("T8", t8, t8 - t7)
+print("T8 @@@", t8, t8 - t7)
 logging.info(f"T8 {t8} {t8 - t7}")
 
 # - REGISTER NODES
 t8a = timer()
-print("LOAD NODES", t8a)
+print("LOAD NODES $$$", t8a)
 nodes, failed = load_nodes()
 t8b = timer()
-print("LOAD NODES FINISHED", t8b, t8b - t8a)
+print("LOAD NODES FINISHED %%%", t8b, t8b - t8a)
 
 t9 = timer()
-print("T9", t9, t9 - t8)
+print("T9 ###", t9, t9 - t8)
 logging.info(f"T9 {t9} {t9 - t8}")
 
 for node_class in nodes:
     class_name = node_class.__name__
     tt = timer()
-    print("class_name", class_name, tt)
+    print("class_name ...", class_name, tt)
     
     node_label = f"{get_label(class_name)} (mtb)"
     NODE_CLASS_MAPPINGS[node_label] = node_class
