@@ -137,7 +137,8 @@ def load_nodes():
         print("T9!", filename, t9b - t9a)
         logging.info(f"T9! {filename} {t9b - t9a}")
         
-
+    t9c = timer()
+    
     if errors:
         log.debug(
             f"Some nodes failed to load:\n\t"
@@ -147,6 +148,10 @@ def load_nodes():
             + "If you think this is a bug, please report it on the github page (https://github.com/melMass/comfy_mtb/issues)"
         )
 
+    t9d = timer()
+    print("T9d", t9d  - t9c)
+    logging.info(f"T9c {t9d - t9c}")
+    
     return (nodes, nodes_failed)
 
 t7 = timer()
@@ -174,7 +179,11 @@ print("T8", t8, t8 - t7)
 logging.info(f"T8 {t8} {t8 - t7}")
 
 # - REGISTER NODES
+t8a = timer()
+print("LOAD NODES", t8a)
 nodes, failed = load_nodes()
+t8b = timer()
+print("LOAD NODES FINISHED", t8b, t8b - t8a)
 
 t9 = timer()
 print("T9", t9, t9 - t8)
